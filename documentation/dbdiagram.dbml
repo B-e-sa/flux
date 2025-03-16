@@ -1,0 +1,84 @@
+enum delivery_tipe {
+  economical
+  fast
+  conventional
+  collect
+}
+
+enum status {
+  created
+  shipped
+  in_transit
+  delivered
+  canceled
+}
+
+enum address_type {
+  house
+  apartment
+  bussiness
+  office
+}
+
+Table admin {
+  id integer [pk, increment]
+  username varchar [not null, unique]
+  password varchar [not null]
+  deliveries integer
+  created_at timestamp
+}
+Ref: admin.deliveries < delivery.id
+
+Table addresse {
+  id integer [pk, increment]
+  first_name varchar [not null]
+  last_name varchar [not null]
+  cpf varchar [not null, unique]
+  email varchar [not null, unique]
+  address integer
+  password varchar [not null]
+  created_at timestamp
+}
+Ref: addresse.address < address.id
+
+Table delivery {
+  id integer [primary key]
+  carrier integer [not null]
+  tracking_number varchar [not null, unique]
+  addresse integer [ref: > addresse.id]
+  receiver varchar
+  status status [not null]
+  type delivery_type [not null]
+  tax decimal
+  final_address integer [not null]
+  deadline timestamp [not null]
+  updated_at timestamp
+  created_at timestamp
+}
+Ref: delivery.carrier - carrier.id
+Ref: delivery.final_address - address.id
+
+Table delivery_status_history {
+  id integer [pk, increment]
+  delivery_id integer [not null]
+  status status [not null]
+  created_at timestamp
+}
+Ref: delivery_status_history.delivery_id > delivery.id
+
+Table carrier {
+  id interger [primary key, increment]
+  base_tax decimal
+  name varchar
+}
+
+Table address {
+  id integer [primary key, increment]
+  cep varchar
+  country varchar [not null]
+  neighborhood varchar
+  street varchar
+  number int
+  reference varchar
+  type address_type
+}
