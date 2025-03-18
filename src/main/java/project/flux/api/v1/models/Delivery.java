@@ -5,12 +5,16 @@ import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import project.flux.api.v1.models.common.DatabaseEntity;
-import project.flux.api.v1.models.enums.DeliveryStatus;
-import project.flux.api.v1.models.enums.DeliveryType;
+import project.flux.api.v1.models.common.enums.DeliveryStatus;
+import project.flux.api.v1.models.common.enums.DeliveryType;
 
 @Getter
+@Setter
+@AllArgsConstructor
 public class Delivery extends DatabaseEntity {	
 	@OneToOne
 	@Column(nullable = false)
@@ -21,17 +25,17 @@ public class Delivery extends DatabaseEntity {
 	private Recipient recipient;
 
 	@OneToOne
-	@Column(nullable = false)
+	@Column(name = "start_address", nullable = false)
 	private Address startAddress;
 	
 	@OneToOne
-	@Column(nullable = false)
+	@Column(name = "final_address",nullable = false)
 	private Address finalAddress;
 	
 	// @OneToOne
 	// private long admin;
 	
-	@Column(nullable = false, unique = true)
+	@Column(name = "tracking_number", nullable = false, unique = true)
 	private String trackingNumber;
 	
 	@Column(nullable = false)
@@ -47,6 +51,4 @@ public class Delivery extends DatabaseEntity {
 	
 	@Column(nullable = false)
 	private double tax;
-	
-	private Date updatedAt;
 }

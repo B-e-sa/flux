@@ -1,4 +1,4 @@
-package project.flux.api.v1.models.enums;
+package project.flux.api.v1.models.common.enums;
 
 public enum AddressType {
 	HOUSE,
