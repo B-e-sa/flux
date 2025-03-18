@@ -9,6 +9,8 @@ public class CarrierDTO {
 	@NotNull
 	private String name;
 	
+	public CarrierDTO() {}
+	
 	public CarrierDTO(String name) {
 		this.name = name;
 	}

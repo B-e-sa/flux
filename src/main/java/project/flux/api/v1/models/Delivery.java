@@ -3,6 +3,9 @@ package project.flux.api.v1.models;
 import java.util.Date;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -12,25 +15,30 @@ import project.flux.api.v1.models.common.DatabaseEntity;
 import project.flux.api.v1.models.common.enums.DeliveryStatus;
 import project.flux.api.v1.models.common.enums.DeliveryType;
 
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 public class Delivery extends DatabaseEntity {	
 	@OneToOne
-	@Column(nullable = false)
+	@JoinColumn(name = "carrier_id", referencedColumnName = "id")
 	private Carrier carrier;
-	
-	@OneToMany
-	@Column(nullable = false)
-	private Recipient recipient;
 
 	@OneToOne
-	@Column(name = "start_address", nullable = false)
+	@JoinColumn(name = "start_address_id", 
+				referencedColumnName = "id", 
+				nullable = false)
 	private Address startAddress;
 	
 	@OneToOne
-	@Column(name = "final_address",nullable = false)
+	@JoinColumn(name = "final_address_id", 
+				referencedColumnName = "id", 
+				nullable = false)
 	private Address finalAddress;
+	
+	@ManyToOne
+	@JoinColumn(name="recipient_id", nullable=false)
+	private Recipient recipient;
 	
 	// @OneToOne
 	// private long admin;

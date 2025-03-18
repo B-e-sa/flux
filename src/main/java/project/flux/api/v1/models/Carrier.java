@@ -11,6 +11,8 @@ import project.flux.api.v1.models.common.DatabaseEntity;
 public class Carrier extends DatabaseEntity {
 	private String name;
 	
+	public Carrier() {}
+	
 	public Carrier(String name) {
 		this.name = name;
 	}

@@ -1,16 +1,23 @@
 package project.flux.api.v1.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import project.flux.api.v1.models.common.DatabaseEntity;
 
+@Entity
+@Setter
 @Getter
+@AllArgsConstructor
 public class Recipient extends DatabaseEntity {
-	@OneToMany
+	@OneToMany(mappedBy = "recipient")
 	@Column(nullable = false)
 	private List<Address> address;
 	
