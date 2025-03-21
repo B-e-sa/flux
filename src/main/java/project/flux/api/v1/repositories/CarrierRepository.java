@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import project.flux.api.v1.models.Carrier;
 
 @Repository
-public interface CarrierRepository extends JpaRepository<Carrier, Integer> {
+public interface CarrierRepository extends JpaRepository<Carrier, Long> {
 	Carrier findByName(String name);
 }
