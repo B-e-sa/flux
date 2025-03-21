@@ -11,6 +11,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ApiRequestExceptionHandler {    
+	@ExceptionHandler(value = { BadRequestException.class })
+    public ResponseEntity<Object> handleBadRequestException(BadRequestException e) {
+		ApiException apiException = new ApiException(
+				e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(apiException, apiException.getHttpStatus());
+    }
+	
+	@ExceptionHandler(value = { NotFoundException.class })
+    public ResponseEntity<Object> handleNotFoundException(NotFoundException e) {
+		ApiException apiException = new ApiException(
+				e.getMessage(), HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(apiException, apiException.getHttpStatus());
+    }
+	
 	@ExceptionHandler(value = { ConflictException.class })
     public ResponseEntity<Object> handleConflictException(ConflictException e) {
 		ApiException apiException = new ApiException(
