@@ -24,12 +24,10 @@ Table admin {
   id integer [pk, increment]
   username varchar [not null, unique]
   password varchar [not null]
-  deliveries integer
   created_at timestamp
 }
-Ref: admin.deliveries < delivery.id
 
-Table addresse {
+Table recipient {
   id integer [pk, increment]
   first_name varchar [not null]
   last_name varchar [not null]
@@ -39,41 +37,10 @@ Table addresse {
   password varchar [not null]
   created_at timestamp
 }
-Ref: addresse.address < address.id
-
-Table delivery {
-  id integer [primary key]
-  carrier integer [not null]
-  tracking_number varchar [not null, unique]
-  addresse integer [ref: > addresse.id]
-  receiver varchar
-  status status [not null]
-  type delivery_type [not null]
-  tax decimal
-  final_address integer [not null]
-  deadline timestamp [not null]
-  updated_at timestamp
-  created_at timestamp
-}
-Ref: delivery.carrier - carrier.id
-Ref: delivery.final_address - address.id
-
-Table delivery_status_history {
-  id integer [pk, increment]
-  delivery_id integer [not null]
-  status status [not null]
-  created_at timestamp
-}
-Ref: delivery_status_history.delivery_id > delivery.id
-
-Table carrier {
-  id interger [primary key, increment]
-  base_tax decimal
-  name varchar
-}
 
 Table address {
   id integer [primary key, increment]
+  addresse_id integer
   cep varchar
   country varchar [not null]
   neighborhood varchar
@@ -82,3 +49,41 @@ Table address {
   reference varchar
   type address_type
 }
+Ref: address.addresse_id > recipient.id
+
+Table carrier {
+  id interger [primary key, increment]
+  name varchar [unique, not null]
+  delivery_type delivery_tipe [not null]
+  base_tax integer [not null]
+}
+
+Table delivery {
+  id integer [primary key]
+  admin_id integer
+  carrier_id integer [not null]
+  final_address_id integer [not null]
+  start_address_id integer [not null]
+  tracking_number varchar [not null, unique]
+  addresse integer
+  receiver varchar
+  status status [not null]
+  type delivery_type [not null]
+  tax decimal
+  deadline timestamp [not null]
+  updated_at timestamp
+  created_at timestamp
+}
+Ref: delivery.admin_id > admin.id
+Ref: delivery.addresse > recipient.id
+Ref: delivery.carrier_id - carrier.id
+Ref: delivery.start_address_id - address.id
+Ref: delivery.final_address_id - address.id
+
+Table delivery_status_history {
+  id integer [pk, increment]
+  delivery_id integer [not null]
+  status status [not null]
+  created_at timestamp
+}
+Ref: delivery_status_history.delivery_id > delivery.id
