@@ -7,14 +7,13 @@ import java.lang.annotation.Target;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import jakarta.validation.constraints.NotNull;
 
 @Constraint(validatedBy = EnumValidatorConstraint.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface EnumValidator {
 	Class<? extends Enum<?>> enumClass();
-	String message() default "Invalid enum value. Verify the available values for this field in the API documentation";
+	String message() default "Invalid value, consult the API documentation for the available values";
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};
 }
