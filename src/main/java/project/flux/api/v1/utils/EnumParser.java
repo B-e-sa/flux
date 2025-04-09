@@ -1,4 +1,4 @@
-package project.flux.api.v1.services.common;
+package project.flux.api.v1.utils;
 
 public class EnumParser {
 	 public static <T extends Enum<T>> T fromString(String string, Class<T> enumClass) {

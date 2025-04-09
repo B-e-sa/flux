@@ -3,14 +3,14 @@ package project.flux.api.v1.services.dtos;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import project.flux.api.v1.models.common.decorators.EnumValidator;
 import project.flux.api.v1.models.common.enums.DeliveryType;
 
 @Getter
 @AllArgsConstructor
-public class CarrierDTO {
-	private long id;
-	
+@NoArgsConstructor
+public class CarrierDTO {	
 	@NotNull
 	private String name;
 	
@@ -20,13 +20,9 @@ public class CarrierDTO {
 	@EnumValidator(enumClass = DeliveryType.class)
 	private String deliveryType;
 	
-	public CarrierDTO() {}
-	
-	public CarrierDTO(long id, 
-			String name, 
+	public CarrierDTO(String name, 
 			String deliveryType, 
 			double baseTax) {
-		this.id = id;
 		this.name = name;
 		this.deliveryType = deliveryType;
 		this.baseTax = baseTax;

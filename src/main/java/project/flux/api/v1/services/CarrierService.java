@@ -12,8 +12,8 @@ import project.flux.api.v1.controllers.common.exceptions.NotFoundException;
 import project.flux.api.v1.models.Carrier;
 import project.flux.api.v1.models.common.enums.DeliveryType;
 import project.flux.api.v1.repositories.CarrierRepository;
-import project.flux.api.v1.services.common.EnumParser;
 import project.flux.api.v1.services.dtos.CarrierDTO;
+import project.flux.api.v1.utils.EnumParser;
 
 @Service
 public class CarrierService {
@@ -25,35 +25,56 @@ public class CarrierService {
 				.findAll()
 				.stream()
                 .map(carrier -> new CarrierDTO(
-                		carrier.getId(),
                 		carrier.getName(),
                 		carrier.getDeliveryType().toString(),
                 		carrier.getBaseTax()))
                 .collect(Collectors.toList());
 	}
 	
-	/*
-	public CarrierDTO findById(int id) {
-		 Optional<Carrier> foundCarrier = carrierRepository.findById(id);
+	public CarrierDTO findById(long id) {
+		 Carrier carrier = carrierRepository
+				 .findById(id)
+				 .orElseThrow(() -> new NotFoundException());
 		 
-		 if (foundCarrier.isPresent() != true)
-			 return null;
-		 
-		 Carrier carrier = foundCarrier.get();
-		 
-		 return new CarrierDTO(carrier.getName(), 
+		 return new CarrierDTO(
+				 carrier.getName(),
 				 carrier.getDeliveryType().toString(),
 				 carrier.getBaseTax());
 	}
-	*/
 	
-	public void deleteCarrier(long id) {
-		Optional<Carrier> foundCarrier = carrierRepository.findById(id);
+	public void edit(long id, CarrierDTO carrier) {
+		Carrier foundCarrier = carrierRepository
+				.findById(id)
+				.orElseThrow(() -> new NotFoundException());
 		
-		if (foundCarrier.isPresent() == false)
-			throw new NotFoundException();
+		if (carrier.getName() != null && 
+				!carrier.getName().equals(foundCarrier.getName()))
+			foundCarrier.setName(carrier.getName());
 		
-		carrierRepository.delete(foundCarrier.get());
+		if (carrier.getBaseTax() != 0 && 
+				carrier.getBaseTax() != foundCarrier.getBaseTax())
+			foundCarrier.setBaseTax(carrier.getBaseTax());
+		
+		
+		if (carrier.getDeliveryType() != null && 
+				!carrier
+				.getDeliveryType()
+				.equals(foundCarrier.getDeliveryType().toString())) {
+			DeliveryType validDeliveryType = 
+		    		EnumParser.fromString(carrier.getDeliveryType(), DeliveryType.class);
+			
+			foundCarrier.setDeliveryType(validDeliveryType);
+		}
+		
+		carrierRepository.save(foundCarrier);
+	}
+	
+	public void delete(long id) {
+		Carrier foundCarrier = carrierRepository
+				.findById(id)
+				.orElseThrow(() -> new NotFoundException());
+		
+		carrierRepository.delete(foundCarrier);
 	}
 	
 	public CarrierDTO findByName(String name) throws NotFoundException {
@@ -63,13 +84,12 @@ public class CarrierService {
 			throw new NotFoundException();
 			
 		return new CarrierDTO(
-				foundCarrier.getId(),
 				foundCarrier.getName(), 
 				foundCarrier.getDeliveryType().toString(),
 				foundCarrier.getBaseTax());
 	}
 	
-	public void create(CarrierDTO carrier) throws NotFoundException { 
+	public void create(CarrierDTO carrier) throws NotFoundException {
 		Carrier existentCarrier = carrierRepository.findByName(carrier.getName());
 		
 		if (existentCarrier != null)
